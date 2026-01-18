@@ -1,0 +1,17 @@
+{
+    "name": "image-converter-exe",
+    "version": "1.0.0",
+    "description": "PNG to AVIF Image Converter",
+    "main": "scripts/convert-images.js",
+    "bin": "scripts/convert-images.js",
+    "scripts": {
+        "build-exe": "pkg scripts/convert-images.js --targets node18-win-x64 --output ImageConverter.exe"
+    },
+    "pkg": {
+        "assets": [],
+        "targets": [
+            "node18-win-x64"
+        ],
+        "outputPath": "dist"
+    }
+}

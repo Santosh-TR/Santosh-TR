@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --color-osmo-carbon: #080808;
+  --color-osmo-paper: #F2F2F2;
+  --color-osmo-acid: #D1F840;
+
+  /* Fonts */
+  --font-oswald: 'Oswald', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+
+  /* Animation Personalities */
+  --ease-premium: cubic-bezier(0.625, 0.05, 0, 1); /* "Heavy luxury door" */
+  --ease-elastic: linear(
+    0, 0.006, 0.025 2.1%, 0.1 4.4%, 0.402 9%, 0.623 12.3%, 0.707 14.2%, 
+    0.958 21.8%, 0.967 24.3%, 0.999 29.9%, 0.997 35.5%, 0.99 41%, 
+    1.002 52.1%, 1 100%
+  ); /* "Rubber Bounce" / Spring Physics */
+
+  /* Fluid Typography System (992px -> 1920px) */
+  /* Base: 16px -> 18px */
+  --text-fluid-base: clamp(1rem, 0.866rem + 0.215vw, 1.125rem);
+  /* Macro: 64px -> 160px (Hero) */
+  --text-fluid-h1: clamp(4rem, -2.4rem + 10.34vw, 10rem);
+  /* Medium: 32px -> 48px */
+  --text-fluid-h2: clamp(2rem, 0.93rem + 1.72vw, 3rem);
+}
+
+:root {
+  /* Expose to CSS variables for inline usage */
+  --cubic-default: var(--ease-premium);
+  --cubic-bounce: var(--ease-elastic);
+}
+
+body {
+  background-color: var(--color-osmo-carbon);
+  color: var(--color-osmo-paper);
+  font-family: var(--font-inter);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Utilities */
+.magnetic-btn {
+  /* Placeholder for magnetic logic */
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-osmo-carbon);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-osmo-acid);
+  border-radius: 5px;
+  border: 2px solid var(--color-osmo-carbon);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E0FF4F; /* Lighter acid on hover */
+}
