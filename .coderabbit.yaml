@@ -22,27 +22,31 @@ reviews:
       - "Draft"
     drafts: false
 
+  # Files to ignore during review
+  path_filters:
+    - "!dist/**"
+    - "!node_modules/**"
+    - "!.next/**"
+    - "!package-lock.json"
+    - "!yarn.lock"
+    - "!.sanity/**"
+
+  # Custom instructions for CodeRabbit AI
+  path_instructions:
+    - path: "**/*"
+      instructions: |
+        You are reviewing a Next.js portfolio website using Sanity CMS and Tailwind CSS.
+        
+        Key Guidelines:
+        1. Performance: Check for optimal image loading (next/image) and code splitting.
+        2. Accessibility: Ensure semantic HTML and proper ARIA attributes.
+        3. SEO: Verify meta tags and heading hierarchy.
+        4. Styles: Prefer Tailwind utility classes over custom CSS.
+        5. Security: Flag any exposed API keys or sensitive data.
+        6. Sanity: Ensure schema definitions are type-safe.
+
 chat:
-  # Enable chatting with the AI about the PR
-  enabled: true
+  # Enable auto-reply for the chat
+  auto_reply:
+    enabled: true
 
-# Custom instructions for CodeRabbit AI
-instructions: |
-  You are reviewing a Next.js portfolio website using Sanity CMS and Tailwind CSS.
-  
-  Key Guidelines:
-  1. Performance: Check for optimal image loading (next/image) and code splitting.
-  2. Accessibility: Ensure semantic HTML and proper ARIA attributes.
-  3. SEO: Verify meta tags and heading hierarchy.
-  4. Styles: Prefer Tailwind utility classes over custom CSS.
-  5. Security: Flag any exposed API keys or sensitive data.
-  6. Sanity: Ensure schema definitions are type-safe.
-
-# Files to ignore during review
-path_filters:
-  - "!dist/**"
-  - "!node_modules/**"
-  - "!.next/**"
-  - "!package-lock.json"
-  - "!yarn.lock"
-  - "!.sanity/**"
