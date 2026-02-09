@@ -27,9 +27,26 @@ export const page = defineType({
             title: 'Sections',
             type: 'array',
             of: [
-                // We will add more blocks here later (Showcase, Grid, etc.)
                 defineArrayMember({
                     type: 'hero',
+                }),
+                defineArrayMember({
+                    type: 'skills',
+                }),
+                defineArrayMember({
+                    type: 'scrollRevealImage',
+                }),
+                defineArrayMember({
+                    type: 'projectsSection',
+                }),
+                defineArrayMember({
+                    type: 'aboutSection',
+                }),
+                defineArrayMember({
+                    type: 'parallaxGallery',
+                }),
+                defineArrayMember({
+                    type: 'scrollGallery',
                 }),
             ],
             options: {

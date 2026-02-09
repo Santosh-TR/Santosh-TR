@@ -1,0 +1,1256 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Page Title"
+      },
+      {
+        "options": {
+          "source": "title"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "options": {
+          "insertMenu": {
+            "views": [
+              {
+                "name": "grid"
+              }
+            ]
+          }
+        },
+        "of": [
+          {
+            "type": "hero",
+            "title": "Hero Section"
+          },
+          {
+            "type": "skills",
+            "title": "Skills Section"
+          },
+          {
+            "type": "scrollRevealImage",
+            "title": "Implosion Scroll Section"
+          },
+          {
+            "type": "projectsSection",
+            "title": "Projects Grid"
+          },
+          {
+            "type": "aboutSection"
+          },
+          {
+            "type": "parallaxGallery",
+            "title": "Parallax Gallery (Vertical)"
+          },
+          {
+            "fieldsets": [
+              {
+                "name": "intro",
+                "title": "Part 1: Intro (Implosion)",
+                "options": {
+                  "collapsible": true
+                }
+              },
+              {
+                "name": "stack",
+                "title": "Part 2: Stacking Gallery",
+                "options": {
+                  "collapsible": true
+                }
+              }
+            ],
+            "type": "scrollGallery",
+            "title": "Scroll Gallery (Combined)"
+          }
+        ],
+        "name": "sections",
+        "type": "array"
+      }
+    ],
+    "name": "page",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              },
+              {
+                "flag": "max",
+                "constraint": 50
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Skill Name"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Upload a skill icon (recommended: SVG or PNG, 128x128px)",
+        "name": "icon",
+        "type": "image",
+        "title": "Skill Icon"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Frontend",
+              "value": "frontend"
+            },
+            {
+              "title": "Backend",
+              "value": "backend"
+            },
+            {
+              "title": "Tools & DevOps",
+              "value": "tools"
+            },
+            {
+              "title": "Design",
+              "value": "design"
+            }
+          ]
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "frontend",
+                  "backend",
+                  "tools",
+                  "design"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "0-100: Your skill level percentage",
+        "name": "proficiency",
+        "type": "number",
+        "title": "Proficiency Level (%)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 50
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "yearsExperience",
+        "type": "number",
+        "title": "Years of Experience"
+      },
+      {
+        "rows": 3,
+        "description": "Brief description of your experience with this skill",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "description": "Skills that connect to this one in the constellation",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "skill"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to skill"
+          }
+        ],
+        "name": "relatedSkills",
+        "type": "array"
+      },
+      {
+        "description": "Optional: Custom position in constellation (0-100%)",
+        "fields": [
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 0
+                  },
+                  {
+                    "flag": "max",
+                    "constraint": 100
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "x",
+            "type": "number",
+            "title": "X Position (%)"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 0
+                  },
+                  {
+                    "flag": "max",
+                    "constraint": 100
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "y",
+            "type": "number",
+            "title": "Y Position (%)"
+          }
+        ],
+        "name": "position",
+        "type": "object",
+        "title": "Constellation Position"
+      },
+      {
+        "description": "Lower numbers appear first",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      }
+    ],
+    "name": "skill",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "description": "Short impactful description for the card",
+        "name": "tagline",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "fields": [
+          {
+            "name": "alt",
+            "type": "string",
+            "title": "Alternative Text"
+          }
+        ],
+        "name": "mainImage",
+        "type": "image"
+      },
+      {
+        "of": [
+          {
+            "to": [
+              {
+                "type": "skill"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to skill"
+          }
+        ],
+        "name": "techStack",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "demoLink",
+        "type": "url",
+        "title": "Live Demo Link"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "repoLink",
+        "type": "url",
+        "title": "GitHub Repo"
+      },
+      {
+        "initialValue": "2025",
+        "name": "year",
+        "type": "string"
+      }
+    ],
+    "name": "project",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "OSMO SUPPLY",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "logoText",
+        "type": "string"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "name": "link",
+                "type": "string",
+                "title": "Link (Slug)"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "navLinks",
+        "type": "array",
+        "title": "Navigation Links"
+      },
+      {
+        "initialValue": "CLONE THIS",
+        "name": "ctaLabel",
+        "type": "string",
+        "title": "CTA Label"
+      },
+      {
+        "initialValue": "https://github.com/santosh",
+        "name": "ctaLink",
+        "type": "string",
+        "title": "CTA Link"
+      }
+    ],
+    "name": "settings",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "DEV TOOLKIT BUILT TO FLEX",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Hero section headline",
+        "name": "title",
+        "type": "string",
+        "title": "Main Headline"
+      },
+      {
+        "rows": 2,
+        "description": "Optional subtitle text",
+        "name": "subtitle",
+        "type": "text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 3
+              },
+              {
+                "flag": "max",
+                "constraint": 7
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Upload 3-7 images for the 3D drum slider (recommended: 16:9 aspect ratio)",
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "description": "Important for SEO and accessibility",
+                "name": "alt",
+                "type": "string",
+                "title": "Alt Text"
+              },
+              {
+                "description": "Optional image caption",
+                "name": "caption",
+                "type": "string"
+              }
+            ],
+            "type": "image"
+          }
+        ],
+        "name": "sliderImages",
+        "type": "array"
+      },
+      {
+        "initialValue": "EXPLORE THE OSMO SHOWCASE • ",
+        "description": "Scrolling text (will repeat automatically)",
+        "name": "marqueeText",
+        "type": "string"
+      },
+      {
+        "initialValue": true,
+        "description": "Show floating particles effect",
+        "name": "enableParticles",
+        "type": "boolean",
+        "title": "Enable Ambient Particles"
+      }
+    ],
+    "name": "hero",
+    "type": "object",
+    "title": "Hero Section"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "SKILLS & EXPERTISE",
+        "name": "sectionTitle",
+        "type": "string"
+      },
+      {
+        "initialValue": "Hover to explore • Click for details",
+        "name": "sectionSubtitle",
+        "type": "string"
+      },
+      {
+        "initialValue": false,
+        "name": "enableParticles",
+        "type": "boolean",
+        "title": "Enable Particle Effects"
+      }
+    ],
+    "name": "skills",
+    "type": "object",
+    "title": "Skills Section"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Selected Projects",
+        "name": "title",
+        "type": "string",
+        "title": "Section Title"
+      },
+      {
+        "initialValue": "A showcase of recent technical experiments.",
+        "name": "subtitle",
+        "type": "string",
+        "title": "Section Subtitle"
+      },
+      {
+        "initialValue": 6,
+        "name": "showCount",
+        "type": "number",
+        "title": "Number of Projects to Show"
+      }
+    ],
+    "name": "projectsSection",
+    "type": "object",
+    "title": "Projects Grid"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "About Me",
+        "name": "title",
+        "type": "string",
+        "title": "Section Title"
+      },
+      {
+        "rows": 5,
+        "description": "A short, impactful biography.",
+        "name": "bio",
+        "type": "text"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "profileImage",
+        "type": "image"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "value",
+                "type": "string",
+                "title": "Value (e.g. 5+)"
+              },
+              {
+                "name": "label",
+                "type": "string",
+                "title": "Label (e.g. Years Exp)"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "stats",
+        "type": "array",
+        "title": "Key Statistics"
+      }
+    ],
+    "name": "aboutSection",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "rows": 2,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The large text that scales UP as the user scrolls.",
+        "name": "centerText",
+        "type": "text"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Image",
+                  "value": "image"
+                },
+                {
+                  "title": "Video URL",
+                  "value": "video"
+                }
+              ],
+              "layout": "radio"
+            },
+            "initialValue": "image",
+            "name": "type",
+            "type": "string",
+            "title": "Media Type"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "hidden": "conditional",
+            "name": "image",
+            "type": "image"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "hidden": "conditional",
+            "name": "videoUrl",
+            "type": "url",
+            "title": "Video URL (MP4/WebM)"
+          }
+        ],
+        "name": "mainMedia",
+        "type": "object",
+        "title": "Main Center Background"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "length",
+                "constraint": 6
+              }
+            ],
+            "level": "error",
+            "message": "You must stick to exactly 6 images for the animation physics to work."
+          }
+        ],
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "type": "image"
+          }
+        ],
+        "name": "gallery",
+        "type": "array",
+        "title": "Floating Cards (Must be 6)"
+      },
+      {
+        "initialValue": "black",
+        "options": {
+          "list": [
+            {
+              "title": "Black / Dark",
+              "value": "black"
+            },
+            {
+              "title": "White / Light",
+              "value": "white"
+            }
+          ]
+        },
+        "name": "overlayColor",
+        "type": "string"
+      }
+    ],
+    "name": "scrollRevealImage",
+    "type": "object",
+    "title": "Implosion Scroll Section"
+  },
+  {
+    "fields": [
+      {
+        "description": "Internal title for reference",
+        "name": "title",
+        "type": "string",
+        "title": "Section Title"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "If provided, will autoplay muted loop. Overrides image.",
+                "name": "videoUrl",
+                "type": "url",
+                "title": "Video URL (Optional)"
+              },
+              {
+                "name": "heading",
+                "type": "string"
+              },
+              {
+                "rows": 3,
+                "name": "subheading",
+                "type": "text"
+              },
+              {
+                "initialValue": "#000000",
+                "description": "Hex color (e.g., #000000) or rgba for text contrast.",
+                "name": "overlayColor",
+                "type": "string"
+              },
+              {
+                "initialValue": 0.3,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 1
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "overlayOpacity",
+                "type": "number"
+              }
+            ],
+            "type": "object",
+            "name": "galleryItem"
+          }
+        ],
+        "name": "items",
+        "type": "array",
+        "title": "Gallery Items"
+      }
+    ],
+    "name": "parallaxGallery",
+    "type": "object",
+    "title": "Parallax Gallery (Vertical)"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string",
+        "title": "Internal Title"
+      },
+      {
+        "initialValue": "DESIGN THAT CAPTIVATES",
+        "name": "centerText",
+        "type": "string",
+        "fieldset": "intro"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "list": [
+                "image",
+                "video"
+              ]
+            },
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "hidden": "conditional",
+            "name": "image",
+            "type": "image"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "hidden": "conditional",
+            "name": "videoUrl",
+            "type": "url"
+          }
+        ],
+        "name": "mainMedia",
+        "type": "object",
+        "title": "Background Media",
+        "fieldset": "intro"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 6
+              }
+            ],
+            "level": "warning",
+            "message": "Best with exactly 6 images"
+          }
+        ],
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "type": "image"
+          }
+        ],
+        "name": "floatingImages",
+        "type": "array",
+        "title": "Floating Images (6 Cards)",
+        "fieldset": "intro"
+      },
+      {
+        "options": {
+          "list": [
+            "black",
+            "white"
+          ]
+        },
+        "initialValue": "black",
+        "name": "overlayColor",
+        "type": "string",
+        "fieldset": "intro"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "heading",
+                "type": "string"
+              },
+              {
+                "rows": 2,
+                "name": "subheading",
+                "type": "text"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "videoUrl",
+                "type": "url"
+              },
+              {
+                "initialValue": "#000000",
+                "name": "overlayColor",
+                "type": "string"
+              },
+              {
+                "initialValue": 0.3,
+                "name": "overlayOpacity",
+                "type": "number"
+              }
+            ],
+            "type": "object",
+            "name": "item"
+          }
+        ],
+        "name": "galleryItems",
+        "type": "array",
+        "title": "Gallery Items (Vertical Stack)",
+        "fieldset": "stack"
+      }
+    ],
+    "fieldsets": [
+      {
+        "name": "intro",
+        "title": "Part 1: Intro (Implosion)",
+        "options": {
+          "collapsible": true
+        }
+      },
+      {
+        "name": "stack",
+        "title": "Part 2: Stacking Gallery",
+        "options": {
+          "collapsible": true
+        }
+      }
+    ],
+    "name": "scrollGallery",
+    "type": "object",
+    "title": "Scroll Gallery (Combined)"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Projects",
+        "name": "title",
+        "type": "string",
+        "title": "Page Title"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "The centered book/creative process image",
+        "name": "heroImage",
+        "type": "image",
+        "title": "Hero Book Image"
+      },
+      {
+        "initialValue": "Idea",
+        "name": "leftHeading",
+        "type": "string"
+      },
+      {
+        "initialValue": "from",
+        "name": "leftSubheading",
+        "type": "string"
+      },
+      {
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "leftDescription",
+        "type": "array"
+      },
+      {
+        "initialValue": "Done.",
+        "name": "rightHeading",
+        "type": "string"
+      },
+      {
+        "initialValue": "to",
+        "name": "rightSubheading",
+        "type": "string"
+      }
+    ],
+    "name": "projectsPage",
+    "type": "document"
+  }
+]

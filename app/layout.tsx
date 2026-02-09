@@ -12,8 +12,11 @@ const oswald = Oswald({
   subsets: ["latin"],
 });
 
+import ThemeProvider from "@/components/ThemeProvider";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import Header from "@/components/Header";
+import ThemeEditor from "@/components/ThemeEditor";
+// import InertiaCursor from "@/components/InertiaCursor";
 // import Cursor from "@/components/Cursor";
 
 export const metadata: Metadata = {
@@ -30,13 +33,17 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${oswald.variable} antialiased bg-osmo-carbon text-osmo-paper`}
+        className={`${inter.variable} ${oswald.variable} antialiased bg-bg-primary text-text-primary`}
       >
-        <SmoothScroll>
-          {/* <Cursor /> */}
-          <Header />
-          {children}
-        </SmoothScroll>
+        <ThemeProvider>
+          <SmoothScroll>
+            {/* <Cursor /> */}
+            {/* <InertiaCursor /> */}
+            <Header />
+            <ThemeEditor />
+            {children}
+          </SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,40 +1,87 @@
 @import "tailwindcss";
 
+:root {
+  --mouse-x: 50vw;
+  --mouse-y: 50vh;
+  --mouse-x-pct: 0.5;
+  --mouse-y-pct: 0.5;
+}
+
+
 @theme {
-  --color-osmo-carbon: #080808;
-  --color-osmo-paper: #F2F2F2;
-  --color-osmo-acid: #D1F840;
+  /* Brand Colors */
+  --color-primary: #A88BFA;
+  --color-secondary: #FFE3C9;
+  --color-accent: #5B21B6;
+
+  /* Status Colors */
+  --color-success: #00FF88;
+  --color-warning: #FFE600;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+
+  /* Background Colors */
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F5F5F6;
+  --color-bg-dark: #2F2F2F;
+  --color-bg-card: #FFFFFF;
+
+  /* Text Colors */
+  --color-text-primary: #FF4400;
+  --color-text-secondary: #525252;
+  --color-text-muted: #A3A3A3;
+  --color-text-light: #FFFFFF;
+
+  /* Border Colors */
+  --color-border-default: #E5E5E5;
+  --color-border-dark: #1F1F1F;
 
   /* Fonts */
   --font-oswald: 'Oswald', sans-serif;
   --font-inter: 'Inter', sans-serif;
 
   /* Animation Personalities */
-  --ease-premium: cubic-bezier(0.625, 0.05, 0, 1); /* "Heavy luxury door" */
-  --ease-elastic: linear(
-    0, 0.006, 0.025 2.1%, 0.1 4.4%, 0.402 9%, 0.623 12.3%, 0.707 14.2%, 
-    0.958 21.8%, 0.967 24.3%, 0.999 29.9%, 0.997 35.5%, 0.99 41%, 
-    1.002 52.1%, 1 100%
-  ); /* "Rubber Bounce" / Spring Physics */
+  --ease-premium: cubic-bezier(0.625, 0.05, 0, 1);
+  --ease-elastic: linear(0, 0.006, 0.025 2.1%, 0.1 4.4%, 0.402 9%, 0.623 12.3%, 0.707 14.2%,
+      0.958 21.8%, 0.967 24.3%, 0.999 29.9%, 0.997 35.5%, 0.99 41%,
+      1.002 52.1%, 1 100%);
 
-  /* Fluid Typography System (992px -> 1920px) */
-  /* Base: 16px -> 18px */
+  /* Fluid Typography System */
   --text-fluid-base: clamp(1rem, 0.866rem + 0.215vw, 1.125rem);
-  /* Macro: 64px -> 160px (Hero) */
   --text-fluid-h1: clamp(4rem, -2.4rem + 10.34vw, 10rem);
-  /* Medium: 32px -> 48px */
   --text-fluid-h2: clamp(2rem, 0.93rem + 1.72vw, 3rem);
 }
 
 :root {
-  /* Expose to CSS variables for inline usage */
   --cubic-default: var(--ease-premium);
   --cubic-bounce: var(--ease-elastic);
+
+  /* --- DYNAMIC SECTION OVERRIDES (Controlled by Theme Editor) --- */
+
+  /* Header */
+  --color-header-bg: #2f2f2f;
+  --color-header-text: #ffffff;
+  --color-header-button-bg: #FF4400;
+  --color-header-button-text: #2F2F2F;
+
+  /* Hero */
+  --color-hero-outer: #FAFAFA;
+  --color-hero-inner: var(--color-bg-dark);
+  --color-hero-text: var(--color-text-primary);
+  --color-active-slide-border: var(--color-primary);
+  --color-pagination-dot: var(--color-text-primary);
+  --color-hero-scroll-bg: var(--color-bg-primary);
+  --color-hero-scroll-icon: var(--color-text-primary);
+
+  /* Footer */
+  --color-footer-text: var(--color-text-primary);
 }
 
 body {
-  background-color: var(--color-osmo-carbon);
-  color: var(--color-osmo-paper);
+  background-color: #FFFFFF;
+  /* White */
+  color: var(--color-osmo-text);
+  /* Black/Dark Gray */
   font-family: var(--font-inter);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -52,7 +99,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-osmo-carbon);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -62,5 +109,6 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #E0FF4F; /* Lighter acid on hover */
+  background: #E0FF4F;
+  /* Lighter acid on hover */
 }

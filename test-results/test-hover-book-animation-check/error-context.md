@@ -1,0 +1,69 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - button "Menu" [ref=e7]:
+          - generic [ref=e8]:
+            - img [ref=e9]
+            - img [ref=e10]
+          - generic [ref=e13]: Menu
+        - link "SANTOSH TR" [ref=e15] [cursor=pointer]:
+          - /url: "#"
+        - link "Hit Me Up" [ref=e18] [cursor=pointer]:
+          - /url: "#"
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - link "SANTOSH TR SANTOSH TR" [ref=e22] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e23]: SANTOSH TR
+            - generic [ref=e24]: SANTOSH TR
+          - link "ABOUT ABOUT" [ref=e26] [cursor=pointer]:
+            - /url: "#about"
+            - generic [ref=e27]: ABOUT
+            - generic [ref=e28]: ABOUT
+          - link "PROJECTS PROJECTS" [ref=e30] [cursor=pointer]:
+            - /url: /projects
+            - generic [ref=e31]: PROJECTS
+            - generic [ref=e32]: PROJECTS
+          - link "CONTACT CONTACT" [ref=e34] [cursor=pointer]:
+            - /url: "#contact"
+            - generic [ref=e35]: CONTACT
+            - generic [ref=e36]: CONTACT
+        - generic [ref=e38]:
+          - link "Twitter / X" [ref=e39] [cursor=pointer]:
+            - /url: "#"
+            - text: Twitter / X
+          - link "Instagram" [ref=e41] [cursor=pointer]:
+            - /url: "#"
+            - text: Instagram
+          - link "LinkedIn" [ref=e43] [cursor=pointer]:
+            - /url: "#"
+            - text: LinkedIn
+  - button "Open Theme Editor" [ref=e45]:
+    - img [ref=e46]
+  - main [ref=e49]:
+    - generic [ref=e52]:
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - paragraph [ref=e56]: from
+            - heading "Idea" [level=2] [ref=e57]
+          - generic [ref=e58]:
+            - paragraph [ref=e59]: At Ribbit, we believe that your insights and needs are essential for creating a great product and a smooth process. That's why we involve you in every step of the journey.
+            - paragraph
+            - paragraph
+            - paragraph [ref=e60]: We handle the entire process from concept to final result, including everything from research, concepts, art direction, copywriting, design, storyboarding, animation, music, and sound effects.
+        - generic [ref=e61]:
+          - paragraph [ref=e62]: to
+          - heading "Done." [level=2] [ref=e63]
+      - img "Creative Process Book" [ref=e71] [cursor=pointer]
+      - generic:
+        - generic:
+          - heading "My Projects" [level=2]
+  - button "Open Next.js Dev Tools" [ref=e79] [cursor=pointer]:
+    - img [ref=e80]
+  - alert [ref=e83]
+```

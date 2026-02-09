@@ -1,36 +1,215 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Osmo Portfolio Clone
 
-## Getting Started
+Modern developer portfolio with **3D interactions**, **Sanity CMS**, and **futuristic design**.
 
-First, run the development server:
+![Hero Preview](https://via.placeholder.com/1200x600/0D0D0D/D1F840?text=3D+Hero+Slider)
+
+---
+
+## ✨ Features
+
+- 🎨 **3D Hero Slider** - GSAP-powered with Sanity images
+- 📦 **Headless CMS** - Fully managed via Sanity Studio
+- ⚡ **Blazing Fast** - Next.js 15 with optimized AVIF images
+- 🎯 **Interactive UI** - Constellation skills, hover effects
+- 📱 **Fully Responsive** - Mobile-first design
+- 🌙 **Dark Theme** - Acid green (#D1F840) accents
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **CMS**: Sanity v3
+- **Styling**: Tailwind CSS v4
+- **Animations**: GSAP
+- **Language**: TypeScript
+- **Fonts**: Oswald, Inter (Google Fonts)
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone <repo-url>
+cd osmo-clone
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.local.example .env.local
+# Edit .env.local with your Sanity credentials
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3001](http://localhost:3001)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Sanity Studio
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Access at [http://localhost:3001/studio](http://localhost:3001/studio)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📂 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+osmo-clone/
+├── app/                    # Next.js app directory
+│   ├── globals.css        # Global styles & theme
+│   └── page.tsx           # Homepage
+├── components/            # React components
+│   ├── HeroBlock.tsx     # 3D hero slider
+│   └── PageBuilder.tsx   # Dynamic sections
+├── sanity/               # Sanity configuration
+│   ├── schemaTypes/      # Content schemas
+│   └── lib/              # Queries & utilities
+├── config/               # App configuration
+│   └── theme.ts          # Design tokens
+├── scripts/              # Utility scripts
+│   └── daily-log.js      # Git-based logger
+└── public/               # Static assets
+    ├── images/           # Optimized images
+    └── fonts/            # Custom fonts
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🎨 Customization
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Theme Colors
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Edit `app/globals.css`:
+
+```css
+--color-osmo-acid: #D1F840;    /* Primary green */
+--color-osmo-carbon: #0D0D0D;  /* Background */
+--color-osmo-paper: #F2F2F2;   /* Text */
+```
+
+See [THEME-GUIDE.md](./THEME-GUIDE.md) for full customization options.
+
+### Adding Content
+
+All content is managed via Sanity Studio:
+
+1. Go to `/studio`
+2. Create/edit content
+3. Publish changes
+4. Frontend auto-updates (ISR)
+
+---
+
+## 📜 Available Scripts
+
+```bash
+npm run dev          # Start dev server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
+
+# Utility scripts
+node scripts/daily-log.js           # Generate daily log
+node scripts/convert-images.js      # Convert images to AVIF
+```
+
+---
+
+## 🎯 Features Roadmap
+
+- [x] Hero block with Sanity integration
+- [x] Image optimization system
+- [x] Theme configuration
+- [ ] Skills section (Constellation)
+- [ ] Projects showcase
+- [ ] About section
+- [ ] Contact form
+- [ ] Footer
+- [ ] SEO optimization
+- [ ] Analytics integration
+
+---
+
+## 📚 Documentation
+
+- [THEME-GUIDE.md](./THEME-GUIDE.md) - Theme customization
+- [LOCAL-FONTS-GUIDE.md](./LOCAL-FONTS-GUIDE.md) - Custom fonts setup
+- [PROJECT-CONTEXT.md](./PROJECT-CONTEXT.md) - Development context
+- [SESSION-HANDOFF.md](./SESSION-HANDOFF.md) - Latest session notes
+
+---
+
+## 🤝 Development Notes
+
+### Adding New Sections
+
+1. Create component in `components/`
+2. Add Sanity schema in `sanity/schemaTypes/`
+3. Update `PageBuilder.tsx` registry
+4. Test with sample content
+5. Deploy!
+
+### Image Optimization
+
+Use the converter for best performance:
+
+```bash
+node scripts/convert-images.js
+# Follow prompts to convert PNG → AVIF
+```
+
+### Daily Logs
+
+Track your progress:
+
+```bash
+# Manual
+node scripts/daily-log.js
+
+# Or double-click
+./Daily Log.bat
+```
+
+---
+
+## 🐛 Troubleshooting
+
+**Port already in use?**
+```bash
+# Dev server auto-uses 3001 if 3000 is busy
+# Or manually kill the process
+```
+
+**Sanity images not loading?**
+- Check `next.config.ts` has `cdn.sanity.io` configured
+- Verify environment variables
+- Check Sanity Studio has published content
+
+**Fonts not applying?**
+- See [LOCAL-FONTS-GUIDE.md](./LOCAL-FONTS-GUIDE.md)
+- Verify font files in `public/fonts/`
+
+---
+
+## 📄 License
+
+MIT License - feel free to use for your own portfolio!
+
+---
+
+## 🌟 Credits
+
+Built with ❤️ using modern web technologies.
+
+**Inspired by**: Osmo's premium design aesthetic  
+**Powered by**: Next.js, Sanity, GSAP  
+**Created by**: Santosh TR

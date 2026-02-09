@@ -19,7 +19,7 @@ interface ParticleSystemProps {
 export default function ParticleSystem({ particleCount = 40 }: ParticleSystemProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const particlesRef = useRef<Particle[]>([]);
-    const animationFrameRef = useRef<number>();
+    const animationFrameRef = useRef<number>(0);
     const mouseRef = useRef({ x: 0, y: 0 });
 
     useEffect(() => {

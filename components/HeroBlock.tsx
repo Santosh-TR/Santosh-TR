@@ -2,10 +2,11 @@
 
 import { useRef, useState, useEffect, useCallback } from "react";
 import clsx from "clsx";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, ChevronUp, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import gsap from "gsap";
 import dynamic from "next/dynamic";
+import { THEME_CONFIG } from "@/config/theme";
 
 // OPTIMIZATION 1: Lazy load ParticleSystem (-13 KB initial bundle)
 const ParticleSystem = dynamic(() => import('./ParticleSystem'), {
@@ -24,32 +25,6 @@ const SLIDE_IMAGES = [
 
 const FACE_Count = 5;
 const ANGLE_STEP = 360 / FACE_Count;
-
-// ============================================
-// HERO EFFECTS CONFIGURATION
-// Toggle features on/off by changing true/false
-// ============================================
-interface HeroEffects {
-    dynamicGradientBackground: boolean;
-    reflectionEffect: boolean;
-    ambientParticles: boolean;
-    edgeVignetteGlow: boolean;
-    hapticFeedback: boolean;
-    slideMetadata: boolean;
-    activeSlideBorder: boolean;
-    scrollTriggeredEntrance: boolean;
-}
-
-const HERO_EFFECTS: HeroEffects = {
-    dynamicGradientBackground: true,  // #5: Animated gradient background
-    reflectionEffect: true,           // #6: Mirrored drum below
-    ambientParticles: false,          // #7: Floating particles (not yet implemented)
-    edgeVignetteGlow: true,           // #8: Pulsing glow on transitions
-    hapticFeedback: false,            // #9: Snap animation (not yet implemented)
-    slideMetadata: false,             // #10: Glassmorphism overlay (not yet implemented)
-    activeSlideBorder: false,         // #12: Animated gradient border (not yet implemented)
-    scrollTriggeredEntrance: false,   // #17: Page load animation (not yet implemented)
-};
 
 // Sanity hero data types
 interface SanityImage {
@@ -71,13 +46,14 @@ interface HeroData {
 }
 
 interface HeroBlockProps {
-    effectsConfig?: HeroEffects;
+    effectsConfig?: typeof THEME_CONFIG.effects; // Use type from theme config
     heroData?: HeroData; // Optional Sanity data
+    variant?: 'dark' | 'light'; // 'dark' = Black Drum (Default), 'light' = White Drum
 }
 
-export default function HeroBlock({ effectsConfig, heroData }: HeroBlockProps) {
-    // Use prop or fallback to default constant
-    const effects = effectsConfig || HERO_EFFECTS;
+export default function HeroBlock({ effectsConfig, heroData, variant = 'dark' }: HeroBlockProps) {
+    // Connect to THEME_CONFIG source of truth
+    const effects = effectsConfig || THEME_CONFIG.effects;
 
     // Use Sanity images if available, otherwise use static images
     const slideImages = heroData?.sliderImages && heroData.sliderImages.length > 0
@@ -85,21 +61,24 @@ export default function HeroBlock({ effectsConfig, heroData }: HeroBlockProps) {
         : SLIDE_IMAGES;
 
     // Get particle setting from Sanity or default
-    const particlesEnabled = heroData?.enableParticles ?? effects.ambientParticles;
+    const particlesEnabled = false; // Forced off by user request
 
-    // Rotation State (continuous angle) - Drives BOTH Transform AND Opacity
-    const [rotationX, setRotationX] = useState(0);
+
     // Active Index for Pagination (0-4)
     const [activeIndex, setActiveIndex] = useState(0);
     // Dynamic Dimensions for 3D Math
     const [radius, setRadius] = useState(241);
     const [faceHeight, setFaceHeight] = useState(350);
+    const [isReady, setIsReady] = useState(false); // Prevents hydration flicker
 
     // Local Hover Cursor State
     const [hoverType, setHoverType] = useState<'up' | 'down' | null>(null);
     const cursorRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const drumRef = useRef<HTMLDivElement>(null);
+
+    const sectionRef = useRef<HTMLElement>(null); // Ref added for entrance animation
+    const hasAnimated = useRef(false); // Guard to prevent re-triggering on scroll/resize
 
     // Dynamic Radius Calculation
     useEffect(() => {
@@ -108,12 +87,17 @@ export default function HeroBlock({ effectsConfig, heroData }: HeroBlockProps) {
         const updateDimensions = () => {
             if (containerRef.current) {
                 const h = containerRef.current.offsetHeight;
-                // Strict 80% Height Scaling (User Reference: 539/675 = 0.798)
-                const constrainedHeight = h * 0.8;
-                setFaceHeight(constrainedHeight);
+                const w = containerRef.current.offsetWidth;
+
+                // 1. Calculate max height based on vertical space (80% rule)
+                // 1. Calculate height based on vertical space (Adjusted for visual comfort)
+                const finalHeight = h * 0.65;
+
+                setFaceHeight(finalHeight);
                 // r = h / (2 * tan(36deg))
                 // tan(36) approx 0.7265
-                setRadius(constrainedHeight / (2 * 0.7265));
+                setRadius(finalHeight / (2 * 0.7265));
+                setIsReady(true);
             }
         };
 
@@ -125,15 +109,19 @@ export default function HeroBlock({ effectsConfig, heroData }: HeroBlockProps) {
     }, []);
 
     // Scroll-Triggered Entrance Animation - #17
+    // Scroll-Triggered Entrance Animation - Run ONCE
     useEffect(() => {
-        if (effects.scrollTriggeredEntrance && sectionRef.current && drumRef.current) {
-            const tl = gsap.timeline();
+        if (effects.scrollTriggeredEntrance && sectionRef.current && !hasAnimated.current) {
+            // User Change: Simple Fade In (No Zoom, Pagination Stable)
             gsap.set(sectionRef.current, { opacity: 0 });
-            gsap.set(drumRef.current, { scale: 0.8, rotationX: -30 });
-
-            tl.to(sectionRef.current, { opacity: 1, duration: 0.8, ease: "power2.out" })
-                .to(drumRef.current, { scale: 1, rotationX: 0, duration: 1, ease: "back.out(1.2)" }, "-=0.4")
-                .from(".pagination-dot", { scale: 0, opacity: 0, duration: 0.4, stagger: 0.1, ease: "back.out(2)" }, "-=0.6");
+            gsap.to(sectionRef.current, {
+                opacity: 1, duration: 1.2, ease: "power2.out", onComplete: () => {
+                    hasAnimated.current = true;
+                }
+            });
+        } else if (hasAnimated.current && sectionRef.current) {
+            // Ensure visibility if already animated (e.g. after resize)
+            gsap.set(sectionRef.current, { opacity: 1 });
         }
     }, [effects.scrollTriggeredEntrance]);
 
@@ -155,59 +143,92 @@ export default function HeroBlock({ effectsConfig, heroData }: HeroBlockProps) {
     }, []);
 
     // OPTIMIZATION 3: Memoize getFaceOpacity (-25% calculation time)
-    // Calculate Opacity based on Angular Distance from "Front" (0deg / 360deg ...)
-    // Front is when (angle + rotationX) % 360 is close to 0.
-    const getFaceOpacity = useCallback((faceIndex: number, currentRotationX: number) => {
-        const faceAngle = faceIndex * ANGLE_STEP;
-        const totalAngle = faceAngle + currentRotationX;
-        const normalized = ((totalAngle % 360) + 360) % 360; // 0..360
-        // Distance from 0 or 360
-        const dist = Math.min(normalized, 360 - normalized); // 0..180
+    // PERFORMANCE: Use Ref for rotation to avoid re-renders
+    const rotationRef = useRef(0);
+    const facesRef = useRef<(HTMLDivElement | null)[]>([]);
 
-        // Spotlight Logic:
-        // Visible if dist < 60.
-        // Full opacity at 0. Zero opacity at 60.
-        // Linear fade: 1 - (dist / 60)
-        // Adjust threshold to tweak "tightness"
+    // OPTIMIZATION: Math-only version of getFaceOpacity (No React State dependency)
+    const sortedFacesRef = useRef([]); // Helper to avoid frequent allocations if needed
+
+    // Fix for Race Condition: Persistent Animation Object
+    const animationProxy = useRef({ val: 0 });
+
+    const calculateOpacity = (faceIndex: number, currentRotation: number) => {
+        const faceAngle = faceIndex * ANGLE_STEP;
+        const totalAngle = faceAngle + currentRotation;
+        const normalized = ((totalAngle % 360) + 360) % 360;
+        const dist = Math.min(normalized, 360 - normalized);
         const threshold = 55;
         if (dist > threshold) return 0;
         return Math.max(0, 1 - (dist / threshold));
-    }, []);
+    };
 
     // OPTIMIZATION 2: useCallback for handleSpin (-30% re-render overhead)
     const handleSpin = useCallback((direction: 'prev' | 'next') => {
         const delta = direction === 'prev' ? ANGLE_STEP : -ANGLE_STEP;
-        const newTargetRotation = rotationX + delta;
+        // Use current target as base, not current visual state
+        const newTargetRotation = rotationRef.current + delta;
+
         // Optimization: Snap target to exact step to avoid drift
         const snapTarget = Math.round(newTargetRotation / ANGLE_STEP) * ANGLE_STEP;
 
-        // Animate Proxy to drive State
-        const proxy = { val: rotationX };
-        gsap.to(proxy, {
+        // UPDATE IMMEDIATELY: Fixes race condition where rapid clicks used stale ref
+        rotationRef.current = snapTarget;
+
+        // INSTANT FEEDBACK: Update Index IMMEDIATELY
+        const normalized = ((snapTarget % 360) + 360) % 360;
+        const index = Math.round(normalized / ANGLE_STEP) % FACE_Count;
+        const newIndex = (FACE_Count - index) % FACE_Count;
+        setActiveIndex(newIndex);
+
+        // Animate Persistent Proxy
+        gsap.to(animationProxy.current, {
             val: snapTarget,
             duration: 0.8,
             ease: "back.out(1.0)",
-            force3D: true,  // GPU acceleration
+            force3D: true,
+            overwrite: true, // Ensure we kill previous tweens
             onUpdate: () => {
-                setRotationX(proxy.val);
-            },
-            onComplete: () => {
-                setRotationX(snapTarget); // Ensure exact snap
-                // Update Index
-                const normalized = ((snapTarget % 360) + 360) % 360;
-                const index = Math.round(normalized / ANGLE_STEP) % FACE_Count;
-                const newIndex = (FACE_Count - index) % FACE_Count;
-                setActiveIndex(newIndex);
+                const currentVal = animationProxy.current.val;
+
+                // 1. Update Drum Rotation (Visual)
+                if (drumRef.current) {
+                    drumRef.current.style.transform = `rotateX(${currentVal}deg)`;
+                }
+
+                // 2. Update Face Opacity (Manual DOM Patching)
+                facesRef.current.forEach((face, i) => {
+                    if (face) {
+                        const opacity = calculateOpacity(i, currentVal);
+                        face.style.opacity = opacity.toString();
+                        // Optional: Toggle pointer events for performance?
+                        face.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
+                    }
+                });
             }
         });
-    }, [rotationX]);
+    }, []);
+
+    // Variant Overrides
+    const variantStyles = variant === 'light' ? {
+        '--color-hero-inner': '#FFFFFF',
+        '--color-hero-outer': '#F5F5F5', // Slightly off-white for contrast
+        'borderColor': 'rgba(0,0,0,0.1)' // Darker border for light mode
+    } as React.CSSProperties : {};
 
     return (
-        <section className="relative w-full min-h-screen pt-[120px] pb-24 px-4 flex flex-col justify-center items-start" data-scroll-section>
+        <section
+            ref={sectionRef}
+            // User requested "Capsule" shape for container, and fix for "Zoom In" glitch.
+            // Opacity-0 ensures checking is hidden until GSAP fades it in.
+            className="relative w-full min-h-screen pt-[120px] pb-24 px-4 flex flex-col justify-center items-start opacity-0"
+            data-scroll-section
+            style={variantStyles}
+        >
 
 
-            {/* Static Background */}
-            <div className="absolute inset-0 z-0 bg-osmo-carbon border-b border-white/10" />
+            {/* Static Background - Transparent now (User Request) */}
+            <div className="absolute inset-0 z-0 bg-transparent border-b border-white/10" />
 
             {/* Ambient Light Particles - #7 */}
             {particlesEnabled && <ParticleSystem particleCount={40} />}
@@ -218,18 +239,29 @@ export default function HeroBlock({ effectsConfig, heroData }: HeroBlockProps) {
 
                     <div className="w-full relative group/container aspect-video">
 
-                        {/* Background & Border Layer (Clipped) */}
-                        <div className="absolute inset-0 bg-[#0D0D0D] border border-white/10 rounded-[40px] overflow-hidden" />
+
+                        {/* Background & Border Layer (Clipped - CAPSULE SHAPE) */}
+                        <div
+                            className={clsx(
+                                "absolute inset-0 rounded-full overflow-hidden transition-all duration-300",
+                                // Active Border Logic
+                                effects.activeSlideBorder ? "border-2" : "border border-white/10"
+                            )}
+                            style={{
+                                backgroundColor: 'var(--color-hero-outer)',
+                                borderColor: effects.activeSlideBorder ? 'var(--color-active-slide-border)' : undefined
+                            }}
+                        />
 
 
 
-                        <div className="relative w-full h-full grid grid-cols-[1fr_8fr_1fr] items-center">
-                            {/* Empty Left Gutter (Column 1) */}
-                            <div />
 
-                            {/* Slider Container (Column 2) - Fills the 80% slot */}
+                        <div className="relative w-full h-full z-20 pointer-events-none">
+                            {/* Content Wrapper now explicit Z-20 to sit above Background (Z-0) */}
+
+                            {/* Slider Container (Centered) */}
                             <div
-                                className="col-start-2 w-full h-full relative flex items-center justify-center overflow-hidden"
+                                className="w-full h-full relative flex items-center justify-center overflow-hidden"
                                 style={{ perspective: '3000px' }}
                                 ref={containerRef}
                                 onPointerMove={handleMouseMove}
@@ -247,54 +279,69 @@ export default function HeroBlock({ effectsConfig, heroData }: HeroBlockProps) {
                                 {/* Custom Cursor - Solid Color (No Blend) */}
                                 <div
                                     ref={cursorRef}
-                                    className="absolute top-0 left-0 w-16 h-16 bg-white rounded-full flex items-center justify-center z-50 pointer-events-none opacity-0 scale-0 origin-center shadow-lg"
+                                    className="absolute top-0 left-0 w-16 h-16 rounded-full flex items-center justify-center z-50 pointer-events-none opacity-0 scale-0 origin-center shadow-lg transition-colors duration-300"
+                                    style={{
+                                        backgroundColor: 'var(--color-hero-scroll-bg)',
+                                        color: 'var(--color-hero-scroll-icon)'
+                                    }}
                                 >
-                                    {hoverType === 'up' ? <ArrowUp className="w-6 h-6 text-black" /> : <ArrowDown className="w-6 h-6 text-black" />}
+                                    {hoverType === 'up' ? <ArrowUp className="w-6 h-6" /> : <ArrowDown className="w-6 h-6" />}
                                 </div>
 
                                 {/* 3D Drum - Rotation Driven by State */}
                                 <div
                                     ref={drumRef}
-                                    className="absolute inset-0 w-full h-full"
+                                    className={clsx(
+                                        "absolute inset-0 w-full h-full transition-opacity duration-500",
+                                        isReady ? "opacity-100" : "opacity-0"
+                                    )}
                                     style={{
                                         transformStyle: 'preserve-3d',
-                                        transform: `rotateX(${rotationX}deg)` // React State drives Visual
+                                        transform: `rotateX(${rotationRef.current}deg)` // Initial render
                                     }}
                                 >
                                     {slideImages.map((src, i) => {
                                         const angle = i * ANGLE_STEP;
-                                        const opacity = getFaceOpacity(i, rotationX);
-                                        const isMain = opacity > 0.8; // Helper for pointer-events?
 
                                         return (
                                             <div
                                                 key={i}
-                                                className="absolute inset-0 pointer-events-auto"
+                                                ref={(el) => { facesRef.current[i] = el; }}
+                                                className="absolute inset-0 pointer-events-auto flex items-center justify-center"
                                                 style={{
                                                     // Dynamic Radius and Height
                                                     transform: `rotateX(${angle}deg) translateZ(${radius}px)`,
                                                     height: `${faceHeight}px`,
-                                                    // Strict 16:9 Aspect Ratio (Width = Height * 1.77)
-                                                    width: `${faceHeight * (16 / 9)}px`,
-                                                    left: '50%',
-                                                    marginLeft: `-${(faceHeight * (16 / 9)) / 2}px`,
-                                                    opacity: opacity, // Smooth Dynamic Opacity
+                                                    // Flexible Width (70% of container) - Removes strict 16:9
+                                                    width: '70%',
+                                                    left: '15%', // Centered (100 - 70) / 2
+                                                    // Initial Opacity (Calculated once on mount/resize)
+                                                    opacity: i === 0 ? 1 : 0,
                                                     backfaceVisibility: 'hidden',
-                                                    pointerEvents: isMain ? 'auto' : 'none',
+                                                    pointerEvents: i === 0 ? 'auto' : 'none',
                                                     top: '50%',
                                                     marginTop: `-${faceHeight / 2}px`
                                                 }}
                                             >
-                                                <div className="w-full h-full relative rounded-lg overflow-hidden border border-white/10 bg-[#0D0D0D] shadow-2xl">
+                                                <div
+                                                    className={clsx(
+                                                        "w-[85%] h-[85%] relative rounded-lg overflow-hidden shadow-2xl",
+                                                        // Active Slide Inner Border
+                                                        effects.activeSlideBorder ? "border" : "border border-white/10"
+                                                    )}
+                                                    style={{
+                                                        backgroundColor: 'var(--color-hero-inner)',
+                                                        borderColor: effects.activeSlideBorder ? 'var(--color-active-slide-border)' : undefined
+                                                    }}
+                                                >
                                                     <Image
                                                         src={src}
                                                         alt={`Slide ${i + 1}`}
                                                         fill
-                                                        sizes="100vw"
-                                                        className="object-cover"
-                                                        priority
+                                                        className="object-contain"
+                                                        sizes="(max-width: 768px) 100vw, 80vw"
+                                                        priority={i === 0}
                                                     />
-
                                                 </div>
                                             </div>
                                         );
@@ -302,40 +349,33 @@ export default function HeroBlock({ effectsConfig, heroData }: HeroBlockProps) {
                                 </div>
                             </div>
 
-                            {/* Pagination Dots (Syncs with Active Index) */}
-                            <div className="h-full flex flex-col justify-center items-center col-start-3 pointer-events-none z-50">
-                                <div className="flex flex-col gap-4">
-                                    {[...Array(5)].map((_, i) => (
-                                        <div
-                                            key={i}
-                                            className={clsx(
-                                                "pagination-dot h-[3px] rounded-full transition-all duration-500 ease-[var(--cubic-default)] mx-auto",
-                                                i === activeIndex
-                                                    ? "w-[40px] bg-osmo-acid opacity-100"
-                                                    : "w-[12px] bg-white opacity-20"
-                                            )}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
 
+                            {/* Pagination (Absolute Right) - Z-999 to force visibility */}
+                            <div className="absolute right-8 top-1/2 -translate-y-1/2 z-[999] flex flex-col gap-3 pointer-events-auto items-center w-12">
+                                {slideImages.map((_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent drum spin
+                                            const diff = i - activeIndex;
+                                            if (diff === 0) return;
+                                            handleSpin(diff > 0 ? 'next' : 'prev');
+                                        }}
+                                        className={clsx(
+                                            "pagination-dot h-1.5 rounded-full transition-[width,background-color] duration-500 ease-out shadow-sm block",
+                                            activeIndex === i
+                                                ? "w-10 bg-primary" // Active: Long Line
+                                                : "w-3 bg-[var(--color-text-primary)] opacity-40" // Inactive: Fixed Short Dash (No Hover Animation)
+                                        )}
+                                        aria-label={`Go to slide ${i + 1}`}
+                                    />
+                                ))}
+                            </div>
 
                         </div>
                     </div>
                 </div>
-            </div >
-
-            {/* CSS Animation for Active Border */}
-            <style jsx global>{`
-                @keyframes borderFlow {
-                    0% {
-                        background-position: 0% 50%;
-                    }
-                    100% {
-                        background-position: 200% 50%;
-                    }
-                }
-            `}</style>
-        </section >
+            </div>
+        </section>
     );
 }
